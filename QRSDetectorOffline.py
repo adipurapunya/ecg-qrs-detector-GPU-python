@@ -71,6 +71,7 @@ class QRSDetectorOffline(object):
         """
         # Configuration parameters.
         self.ecg_data_path = ecg_data_path
+        self.signal_length = 10000
 
         self.signal_frequency = 300  # Set ECG device frequency in samples per second here.
 
@@ -141,11 +142,8 @@ class QRSDetectorOffline(object):
         """
         Method loading ECG data set from a file.
         """
-        ecgrecord = wfdb.rdsamp(self.ecg_data_path, sampfrom=0, sampto=10000)
-        #ecgrecord = wfdb.rdsamp('ecg_data/rec_10', sampfrom=0, sampto=10000)
-
+        ecgrecord = wfdb.rdsamp(self.ecg_data_path, sampfrom=0, sampto=self.signal_length)
         self.ecg_data_raw = ecgrecord.p_signals
-
     """ECG measurements data processing methods."""
 
     def detect_peaks(self):
@@ -325,4 +323,4 @@ class QRSDetectorOffline(object):
         return ind
 
 if __name__ == "__main__":
-    qrs_detector = QRSDetectorOffline(ecg_data_path="ecg_data/rec_10", verbose=True, log_data=False, plot_data=True, show_plot=True)
+    qrs_detector = QRSDetectorOffline(ecg_data_path="ecg_data/person_30/rec_1", verbose=True, log_data=False, plot_data=True, show_plot=True)
