@@ -142,8 +142,8 @@ class QRSDetectorOffline(object):
         """
         Method loading ECG data set from a file.
         """
-        ecgrecord = wfdb.rdsamp(self.ecg_data_path, sampfrom=0, sampto=self.signal_length)
-        self.ecg_data_raw = ecgrecord.p_signals
+        p_signals, _ = wfdb.rdsamp(self.ecg_data_path, sampfrom=0, sampto=self.signal_length)
+        self.ecg_data_raw = p_signals
     """ECG measurements data processing methods."""
 
     def detect_peaks(self):
