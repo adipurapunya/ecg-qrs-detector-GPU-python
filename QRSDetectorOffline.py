@@ -142,8 +142,8 @@ class QRSDetectorOffline(object):
         """
         Method loading ECG data set from a file.
         """
-        ecgrecord = wfdb.rdsamp(self.ecg_data_path, sampfrom=0, sampto=self.signal_length)
-        self.ecg_data_raw = ecgrecord.p_signals
+        ecgrecord, field = wfdb.rdsamp(self.ecg_data_path, sampfrom=0, sampto=self.signal_length)
+        self.ecg_data_raw = ecgrecord
     """ECG measurements data processing methods."""
 
     def detect_peaks(self):
@@ -173,11 +173,13 @@ class QRSDetectorOffline(object):
         self.integrated_ecg_measurements = np.convolve(self.squared_ecg_measurements, np.ones(self.integration_window))
 
         # Fiducial mark - peak detection on integrated measurements.
-        self.detected_peaks_indices = self.findpeaks(data=self.integrated_ecg_measurements,
-                                                     limit=self.findpeaks_limit,
-                                                     spacing=self.findpeaks_spacing)
+        self.detected_peaks_indices = self.findpeaks(data=self.integrated_ecg_measurements, limit=self.findpeaks_limit, spacing=self.findpeaks_spacing)
 
         self.detected_peaks_values = self.integrated_ecg_measurements[self.detected_peaks_indices]
+
+        #print('detected_peaks_indices' , self.detected_peaks_indices)
+
+        #print('detected_peaks_values', self.detected_peaks_values)
 
     """QRS detection methods."""
 
@@ -323,4 +325,4 @@ class QRSDetectorOffline(object):
         return ind
 
 if __name__ == "__main__":
-    qrs_detector = QRSDetectorOffline(ecg_data_path="ecg_data/person_30/rec_1", verbose=True, log_data=False, plot_data=True, show_plot=True)
+    qrs_detector = QRSDetectorOffline(ecg_data_path="ecg_data/person_1/rec_1", verbose=True, log_data=False, plot_data=True, show_plot=True)
